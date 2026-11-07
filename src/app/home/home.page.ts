@@ -132,6 +132,9 @@ export class HomePage implements OnInit, OnDestroy {
 
   private stopAuthListener?: Unsubscribe;
 
+
+  // Initialise les données de la page et écoute l’état de connexion.
+
   ngOnInit(): void {
     this.loadGenres();
     this.loadMovies();
@@ -150,6 +153,7 @@ export class HomePage implements OnInit, OnDestroy {
     );
   }
 
+  // Recharge les films manuels et les favoris lorsque l’utilisateur revient sur la page.
   ionViewWillEnter(): void {
     void this.loadManualMovies();
 
@@ -158,10 +162,13 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
+  // Arrête l’écoute de l’authentification quand la page est détruite.
   ngOnDestroy(): void {
     this.stopAuthListener?.();
   }
 
+
+// Récupère la liste des genres de films depuis TMDB.
   loadGenres(): void {
     this.tmdb.getMovieGenres().subscribe({
       next: (response) => this.genres.set(response.genres),
@@ -171,10 +178,12 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
+// Charge les films populaires depuis TMDB.
   loadMovies(): void {
     this.loadRequest(this.tmdb.getPopularMovies());
   }
 
+  // Récupère les films ajoutés manuellement.
   async loadManualMovies(): Promise<void> {
     this.manualMoviesLoading.set(true);
     this.manualMoviesError.set('');
@@ -192,6 +201,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
+  // Met à jour la recherche
   onSearchInput(event: CustomEvent<{ value?: string | null }>): void {
     const query = (event.detail.value ?? '').trim();
 
@@ -206,6 +216,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.loadRequest(this.tmdb.searchMovies(query));
   }
 
+  // Sélectionne ou désélectionne un genre et charge les films correspondants.
   selectGenre(genreId: number | null): void {
     const nextGenreId = this.selectedGenreId() === genreId ? null : genreId;
 
@@ -220,6 +231,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.loadRequest(this.tmdb.getMoviesByGenre(nextGenreId));
   }
 
+  // Traite le changement de genre effectué dans le sélecteur Ionic.
   onGenreChange(
     event: CustomEvent<{ value?: number | string | null }>,
   ): void {
@@ -237,6 +249,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
+  // Traite le changement de genre effectué dans le sélecteur Ionic.
   private loadRequest(request: Observable<TmdbMovieResponse>): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -256,6 +269,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
+  // Récupère les identifiants des favoris de l’utilisateur connecté.
   async loadFavorites(): Promise<void> {
     try {
       const favorites = await this.firebaseService.getFavorites();
@@ -265,10 +279,12 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
+  // Indique si un film figure déjà dans la liste des favoris.
   isFavorite(movieId: number | string): boolean {
     return this.favoriteIds().has(movieId);
   }
 
+  // Ajoute ou retire des favoris un film TMDB ou un film manuel.
   async toggleCatalogFavorite(movie: HomeCatalogMovie): Promise<void> {
     if (movie.source === 'tmdb' && movie.tmdbMovie) {
       await this.toggleFavorite(movie.tmdbMovie);
@@ -318,7 +334,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
 
-  // Pour l’instant, cette action ne gère que les favoris TMDB.
+  // Ajoute ou retire un film TMDB des favoris et met à jour les préférences de matching.
   async toggleFavorite(movie: TmdbMovie): Promise<void> {
     try {
       if (this.isFavorite(movie.id)) {
@@ -368,6 +384,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
+  // Retourne l’URL d’une affiche manuelle ou construit l’URL TMDB.
   getPosterUrl(path: string | null): string | null {
     if (!path) {
       return null;
