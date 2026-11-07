@@ -1,0 +1,157 @@
+.users-content {
+  width: min(100%, 1000px);
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.users-intro {
+  margin: 8px 0 22px;
+
+  h1 {
+    margin: 0 0 8px;
+    color: var(--ion-text-color);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+  }
+}
+
+.users-loading {
+  display: flex;
+  min-height: 160px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--ion-color-medium);
+
+  ion-spinner {
+    color: var(--ion-color-primary);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.users-error,
+.users-empty,
+.user-card {
+  margin: 0;
+  border: 1px solid var(--ion-color-step-150, #333);
+  border-radius: 14px;
+  background: var(--ion-card-background, var(--ion-background-color));
+  box-shadow: none;
+}
+
+.users-error ion-card-content,
+.users-empty ion-card-content {
+  padding: 18px;
+  color: var(--ion-text-color);
+}
+
+.users-error p {
+  margin: 0 0 14px;
+  line-height: 1.5;
+}
+
+.users-list {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  background: transparent;
+}
+
+.user-card {
+  overflow: hidden;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.user-card ion-card-header {
+  padding: 18px 18px 10px;
+}
+
+.user-card ion-card-title {
+  color: var(--ion-text-color);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.user-card ion-card-subtitle {
+  margin-top: 5px;
+  color: var(--ion-color-medium);
+  font-size: 0.88rem;
+  overflow-wrap: anywhere;
+}
+
+.user-card ion-card-content {
+  padding: 4px 18px 18px;
+}
+
+.user-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-details ion-chip {
+  height: 28px;
+  margin: 0;
+  font-size: 0.76rem;
+}
+
+.user-details p {
+  width: 100%;
+  margin: 2px 0 0;
+  color: var(--ion-color-medium);
+  font-size: 0.85rem;
+}
+
+.user-card ion-note {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.82rem;
+}
+
+.user-status-button {
+  min-height: 42px;
+  margin: 16px 0 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.user-status-button ion-spinner {
+  width: 20px;
+  height: 20px;
+}
+
+@media (min-width: 640px) {
+  .users-content {
+    padding: 30px 24px 48px;
+  }
+
+  .users-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+@media (min-width: 980px) {
+  .users-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (hover: hover) {
+  .user-card:hover {
+    border-color: var(--ion-color-primary);
+    transform: translateY(-2px);
+  }
+}

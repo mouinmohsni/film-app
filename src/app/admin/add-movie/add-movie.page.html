@@ -1,0 +1,182 @@
+<app-page-header
+  title="ajouter Films"
+  [showMenu]="true"
+></app-page-header>
+
+
+<ion-content [fullscreen]="true">
+  <main class="add-movie-content">
+    <section class="page-intro">
+      <p class="page-eyebrow">Administration</p>
+      <h1>Ajouter un film</h1>
+      <p>Complète les informations qui seront enregistrées dans le catalogue.</p>
+    </section>
+
+    <form class="movie-form" (ngSubmit)="saveMovie()">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Informations du film</ion-card-title>
+          <ion-card-subtitle>Les champs marqués comme obligatoires doivent être remplis.</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-input
+              label="Titre"
+              labelPlacement="stacked"
+              name="title"
+              [(ngModel)]="title"
+              placeholder="Ex. Le Voyage de Chihiro"
+              maxlength="200"
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-textarea
+              label="Résumé"
+              labelPlacement="stacked"
+              name="overview"
+              [(ngModel)]="overview"
+              placeholder="Résumé du film"
+              rows="5"
+              autoGrow="true"
+              maxlength="5000"
+            ></ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              type="url"
+              label="Adresse de l’affiche"
+              labelPlacement="stacked"
+              name="posterUrl"
+              [(ngModel)]="posterUrl"
+              placeholder="https://exemple.com/affiche.jpg"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              type="date"
+              label="Date de sortie"
+              labelPlacement="stacked"
+              name="releaseDate"
+              [(ngModel)]="releaseDate"
+            ></ion-input>
+          </ion-item>
+
+          <div class="form-row">
+            <ion-item>
+              <ion-input
+                type="number"
+                label="Année"
+                labelPlacement="stacked"
+                name="year"
+                [(ngModel)]="year"
+                placeholder="Ex. 2024"
+                min="1888"
+                max="2100"
+                step="1"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                type="number"
+                label="Note sur 10"
+                labelPlacement="stacked"
+                name="voteAverage"
+                [(ngModel)]="voteAverage"
+                placeholder="Ex. 8.5"
+                min="0"
+                max="10"
+                step="0.1"
+              ></ion-input>
+            </ion-item>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Genres et personnes</ion-card-title>
+          <ion-card-subtitle>
+            Sépare chaque valeur par une virgule ou écris-en une par ligne.
+          </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-select
+              label="Genres"
+              labelPlacement="stacked"
+              name="selectedGenres"
+              [(ngModel)]="selectedGenres"
+              [multiple]="true"
+              interface="alert"
+              placeholder="Choisis un ou plusieurs genres"
+              [disabled]="isLoadingGenres() || genres().length === 0"
+            >
+              <ion-select-option
+                *ngFor="let genre of genres()"
+                [value]="genre.name"
+              >
+                {{ genre.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-note *ngIf="isLoadingGenres()">
+            Chargement des genres…
+          </ion-note>
+
+          <ion-note color="danger" *ngIf="genresErrorMessage()">
+            {{ genresErrorMessage() }}
+          </ion-note>
+
+
+          <ion-item>
+            <ion-textarea
+              label="Réalisateurs"
+              labelPlacement="stacked"
+              name="directorNamesText"
+              [(ngModel)]="directorNamesText"
+              placeholder="Hayao Miyazaki"
+              rows="2"
+              autoGrow="true"
+            ></ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-textarea
+              label="Acteurs"
+              labelPlacement="stacked"
+              name="actorNamesText"
+              [(ngModel)]="actorNamesText"
+              placeholder="Rumi Hiiragi, Miyu Irino"
+              rows="3"
+              autoGrow="true"
+            ></ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button
+        class="submit-button"
+        type="submit"
+        expand="block"
+        [disabled]="isSaving"
+      >
+        <ion-spinner
+          *ngIf="isSaving"
+          name="crescent"
+          slot="start"
+        ></ion-spinner>
+
+        {{ isSaving ? 'Enregistrement…' : 'Enregistrer le film' }}
+      </ion-button>
+    </form>
+  </main>
+</ion-content>
+

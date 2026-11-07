@@ -1,0 +1,35 @@
+ion-toolbar {
+  --background: var(--app-header);
+  --color: var(--app-header-text);
+  position: relative;
+}
+
+ion-title.page-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% - 96px);
+  transform: translate(-50%, -50%);
+  color: var(--app-header-text);
+  font-size: clamp(0.8rem, 3.5vw, 1rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.3px;
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+
+
+ion-buttons {
+  position: relative;
+  z-index: 1;
+}
+
+ion-menu-button,
+ion-back-button {
+  --color: var(--app-header-text);
+}

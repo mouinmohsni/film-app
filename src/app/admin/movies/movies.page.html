@@ -1,0 +1,101 @@
+
+<app-page-header
+  title="Films"
+  [showMenu]="true"
+></app-page-header>
+
+<ion-content [fullscreen]="true">
+  <main class="movies-content">
+    <section class="movies-intro">
+      <h1>Films ajoutés manuellement</h1>
+      <p>Voici les films enregistrés dans le catalogue de l’application.</p>
+    </section>
+
+    <div class="movies-loading" *ngIf="isLoading()">
+      <ion-spinner name="crescent" aria-label="Chargement des films"></ion-spinner>
+      <p>Chargement des films…</p>
+    </div>
+
+    <ion-card class="movies-error" *ngIf="!isLoading() && errorMessage()">
+      <ion-card-content>
+        <p>{{ errorMessage() }}</p>
+        <ion-button fill="outline" (click)="loadMovies()">
+          Réessayer
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card
+      class="movies-empty"
+      *ngIf="!isLoading() && !errorMessage() && movies().length === 0"
+    >
+      <ion-card-content>
+        Aucun film manuel n’est encore enregistré.
+      </ion-card-content>
+    </ion-card>
+
+    <section
+      class="movies-grid"
+      *ngIf="!isLoading() && !errorMessage() && movies().length > 0"
+    >
+      <ion-card class="movie-card" *ngFor="let movie of movies()">
+        <div class="movie-poster">
+          <ion-img
+            *ngIf="movie.posterUrl; else noPoster"
+            [src]="movie.posterUrl"
+            [alt]="'Affiche de ' + movie.title"
+          ></ion-img>
+
+          <ng-template #noPoster>
+            <div class="poster-placeholder">
+              <ion-icon name="film-outline" aria-hidden="true"></ion-icon>
+              <span>Pas d’affiche</span>
+            </div>
+          </ng-template>
+        </div>
+
+        <ion-card-header>
+          <ion-card-title>{{ movie.title }}</ion-card-title>
+
+          <ion-card-subtitle>
+            {{
+              movie.year
+                ? movie.year
+                : movie.releaseDate
+                  ? movie.releaseDate.substring(0, 4)
+                  : 'Année inconnue'
+            }}
+            <span *ngIf="movie.voteAverage !== null">
+              · Note {{ movie.voteAverage | number: '1.1-1' }}/10
+            </span>
+          </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p class="movie-overview">
+            {{ movie.overview || 'Aucun résumé renseigné.' }}
+          </p>
+
+          <div class="movie-section" *ngIf="movie.genreNames.length > 0">
+            <h2>Genres</h2>
+            <div class="movie-chips">
+              <ion-chip *ngFor="let genre of movie.genreNames">
+                <ion-label>{{ genre }}</ion-label>
+              </ion-chip>
+            </div>
+          </div>
+
+          <div class="movie-section" *ngIf="movie.directorNames.length > 0">
+            <h2>Réalisation</h2>
+            <p>{{ movie.directorNames.join(', ') }}</p>
+          </div>
+
+          <div class="movie-section" *ngIf="movie.actorNames.length > 0">
+            <h2>Acteurs</h2>
+            <p>{{ movie.actorNames.join(', ') }}</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </section>
+  </main>
+</ion-content>

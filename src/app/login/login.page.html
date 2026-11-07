@@ -1,0 +1,59 @@
+<app-page-header
+  title="Connexion"
+  [showBack]="true"
+  defaultHref="/home"
+></app-page-header>
+
+<ion-content>
+  <div class="login-layout">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Bon retour</ion-card-title>
+        <ion-card-subtitle>Connecte-toi à ton compte Films-app</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form (ngSubmit)="login()">
+          <ion-input
+            fill="outline"
+            label="Adresse e-mail"
+            labelPlacement="floating"
+            type="email"
+            name="email"
+            autocomplete="email"
+            [(ngModel)]="email"
+            required
+          ></ion-input>
+
+          <ion-input
+            class="ion-margin-top"
+            fill="outline"
+            label="Mot de passe"
+            labelPlacement="floating"
+            type="password"
+            name="password"
+            autocomplete="current-password"
+            [(ngModel)]="password"
+            required
+          ></ion-input>
+
+          <ion-button
+            class="ion-margin-top"
+            expand="block"
+            type="submit"
+            [disabled]="isLoading"
+          >
+            {{ isLoading ? 'Connexion…' : 'Se connecter' }}
+          </ion-button>
+        </form>
+
+        <div class="register-link">
+          <p>Tu n’as pas encore de compte ?</p>
+          <ion-button fill="clear" routerLink="/register">
+            Créer un compte
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

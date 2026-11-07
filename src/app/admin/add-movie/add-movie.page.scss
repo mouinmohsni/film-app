@@ -1,0 +1,125 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+.add-movie-content {
+  width: min(100%, 900px);
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.page-intro {
+  margin: 8px 0 24px;
+
+  h1 {
+    margin: 4px 0 8px;
+    color: var(--ion-text-color);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  p:last-child {
+    max-width: 650px;
+    margin: 0;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+  }
+}
+
+.page-eyebrow {
+  margin: 0;
+  color: var(--ion-color-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.movie-form {
+  display: grid;
+  gap: 18px;
+}
+
+.movie-form ion-card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--ion-color-step-150, #333);
+  border-radius: 16px;
+  background: var(--ion-card-background, var(--ion-background-color));
+  box-shadow: none;
+}
+
+.movie-form ion-card-header {
+  padding: 20px 20px 12px;
+}
+
+.movie-form ion-card-title {
+  color: var(--ion-text-color);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.movie-form ion-card-subtitle {
+  margin-top: 6px;
+  color: var(--ion-color-medium);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.movie-form ion-card-content {
+  display: grid;
+  gap: 8px;
+  padding: 8px 20px 20px;
+}
+
+.movie-form ion-item {
+  --background: transparent;
+  --color: var(--ion-text-color);
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --border-color: var(--ion-color-step-150, #333);
+}
+
+.movie-form ion-input,
+.movie-form ion-textarea {
+  --color: var(--ion-text-color);
+  --placeholder-color: var(--ion-color-medium);
+  --highlight-color-focused: var(--ion-color-primary);
+}
+
+.movie-form ion-textarea {
+  min-height: 72px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.submit-button {
+  min-height: 48px;
+  margin: 4px 0 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.submit-button ion-spinner {
+  width: 20px;
+  height: 20px;
+}
+
+@media (min-width: 640px) {
+  .add-movie-content {
+    padding: 32px 24px 48px;
+  }
+
+  .form-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,76 @@
+ion-content {
+  --background: var(--app-background);
+}
+
+ion-content::part(scroll) {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-layout {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+ion-card {
+  width: 100%;
+  max-width: 440px;
+  margin: 0;
+  border: 1px solid var(--app-border);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  --background: var(--app-surface);
+  --color: var(--app-text);
+}
+
+ion-card-title {
+  color: var(--app-text);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+ion-card-subtitle {
+  margin-top: 6px;
+  color: var(--app-muted);
+}
+
+ion-input {
+  margin-top: 14px;
+  --background: var(--app-input-background);
+  --color: var(--app-text);
+  --placeholder-color: var(--app-muted);
+  --highlight-color-focused: var(--app-accent);
+  --border-color: var(--app-border);
+  --border-radius: 10px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+ion-button[type='submit'] {
+  margin-top: 24px;
+  --background: var(--app-accent);
+  --background-activated: var(--app-accent-pressed);
+  --color: var(--app-accent-text);
+  --border-radius: 10px;
+  font-weight: 700;
+}
+
+.register-link {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.register-link p {
+  margin-bottom: 4px;
+  color: var(--app-muted);
+}
+
+.register-link ion-button {
+  --color: var(--app-accent);
+  font-weight: 600;
+}

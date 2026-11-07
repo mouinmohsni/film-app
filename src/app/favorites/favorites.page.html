@@ -1,0 +1,116 @@
+<app-page-header
+  title="Films-app"
+  [showMenu]="true"
+></app-page-header>
+
+<ion-content>
+  <main class="favorites-content">
+    <section class="page-intro">
+      <h1>Mes favoris</h1>
+      <p>Retrouve ici les films que tu as enregistrés.</p>
+    </section>
+
+    <div class="loading-state" *ngIf="isLoading()">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement de tes favoris…</p>
+    </div>
+
+    <div
+      class="error-state"
+      *ngIf="!isLoading() && errorMessage()"
+    >
+      <p>{{ errorMessage() }}</p>
+      <ion-button (click)="loadFavorites()">Réessayer</ion-button>
+    </div>
+
+    <div
+      class="empty-state"
+      *ngIf="
+        !isLoading() &&
+        !errorMessage() &&
+        !isAuthenticated()
+      "
+    >
+      <p>Connecte-toi pour consulter tes favoris.</p>
+      <ion-button routerLink="/login">Connexion</ion-button>
+    </div>
+
+    <div
+      class="empty-state"
+      *ngIf="
+        !isLoading() &&
+        !errorMessage() &&
+        isAuthenticated() &&
+        favorites().length === 0
+      "
+    >
+      <p>Tu n’as pas encore ajouté de films à tes favoris.</p>
+      <ion-button routerLink="/home">Découvrir les films</ion-button>
+    </div>
+
+    <div
+      class="favorites-grid"
+      *ngIf="
+        !isLoading() &&
+        !errorMessage() &&
+        isAuthenticated() &&
+        favorites().length > 0
+      "
+    >
+      <ion-card
+        class="favorite-card"
+        *ngFor="let movie of favorites()"
+      >
+        <ion-button
+          class="remove-favorite-button"
+          fill="solid"
+          shape="round"
+          size="small"
+          [attr.aria-label]="'Retirer ' + movie.title + ' des favoris'"
+          title="Retirer des favoris"
+          (click)="removeFavorite(movie.id)"
+        >
+          <ion-icon
+            slot="icon-only"
+            name="heart"
+          ></ion-icon>
+        </ion-button>
+
+        <a
+          class="favorite-card-link"
+          [routerLink]="['/movie-detail', movie.id]"
+          [attr.aria-label]="'Afficher les détails de ' + movie.title"
+        >
+          <div class="poster-wrapper">
+            <ng-container
+              *ngIf="getPosterUrl(movie.posterPath) as posterUrl; else noPoster"
+            >
+              <img
+                [src]="posterUrl"
+                [alt]="'Affiche de ' + movie.title"
+                loading="lazy"
+              />
+            </ng-container>
+
+            <ng-template #noPoster>
+              <div class="no-poster">Affiche indisponible</div>
+            </ng-template>
+          </div>
+
+          <div class="movie-info">
+            <h2 class="movie-title">{{ movie.title }}</h2>
+
+            <p class="movie-meta">
+              {{
+                movie.releaseDate
+                  ? (movie.releaseDate | slice: 0 : 4)
+                  : 'Date inconnue'
+              }}
+              · Note {{ movie.voteAverage | number: '1.1-1' }}/10
+            </p>
+          </div>
+        </a>
+      </ion-card>
+    </div>
+  </main>
+</ion-content>

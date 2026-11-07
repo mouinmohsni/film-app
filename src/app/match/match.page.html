@@ -1,0 +1,89 @@
+<app-page-header
+  title="Match"
+  [showMenu]="true"
+></app-page-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Match</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <section class="page-intro">
+    <h1>Profils compatibles</h1>
+    <p>
+      Les correspondances sont calculées selon les genres (30 %), les acteurs
+      (30 %), les réalisateurs (20 %) et les années de sortie (20 %).
+    </p>
+  </section>
+
+  <div class="loading-state" *ngIf="isLoading()">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Recherche des correspondances…</p>
+  </div>
+
+  <ion-card class="message-card" *ngIf="!isLoading() && message()">
+    <ion-card-content>
+      {{ message() }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card
+    class="match-card"
+    *ngFor="let match of matches()"
+  >
+    <ion-card-content>
+      <div class="match-header">
+        <ion-avatar class="match-avatar">
+          <ng-container *ngIf="match.profile.photoDataUrl; else defaultAvatar">
+            <img
+              [src]="match.profile.photoDataUrl"
+              [alt]="'Photo de ' + match.profile.prenom"
+            />
+          </ng-container>
+
+          <ng-template #defaultAvatar>
+            <ion-icon name="person-circle-outline"></ion-icon>
+          </ng-template>
+        </ion-avatar>
+
+        <div class="match-identity">
+          <h2>{{ match.profile.prenom }} {{ match.profile.nom }}</h2>
+          <p>Profil participant au matching</p>
+        </div>
+
+        <div class="match-score">
+          <strong>{{ match.score | number: '1.1-1' }} %</strong>
+          <span>compatibilité</span>
+        </div>
+      </div>
+
+      <ion-progress-bar
+        color="success"
+        [value]="match.score / 100"
+        aria-label="Pourcentage de compatibilité"
+      ></ion-progress-bar>
+
+      <div class="score-details">
+        <ion-chip>
+          <ion-label>Genres {{ match.genreScore | number: '1.0-0' }} %</ion-label>
+        </ion-chip>
+
+        <ion-chip>
+          <ion-label>Acteurs {{ match.actorScore | number: '1.0-0' }} %</ion-label>
+        </ion-chip>
+
+        <ion-chip>
+          <ion-label>
+            Réalisateurs {{ match.directorScore | number: '1.0-0' }} %
+          </ion-label>
+        </ion-chip>
+
+        <ion-chip>
+          <ion-label>Années {{ match.yearScore | number: '1.0-0' }} %</ion-label>
+        </ion-chip>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

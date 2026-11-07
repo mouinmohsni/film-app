@@ -1,20 +1,168 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-page-header
+  title="Films-app"
+  [showMenu]="true"
+></app-page-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <main class="home-content">
+    <section class="page-intro">
+      <h1>Films populaires</h1>
+      <p>Découvre les films du moment.</p>
+    </section>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+    <section class="catalog-controls">
+      <ion-searchbar
+        class="movie-search"
+        placeholder="Rechercher un film"
+        aria-label="Rechercher un film par titre"
+        [debounce]="400"
+        [value]="searchQuery()"
+        (ionInput)="onSearchInput($event)"
+      ></ion-searchbar>
+
+      <ion-item class="genre-filter" lines="none">
+        <ion-label>Catégorie</ion-label>
+
+        <ion-select
+          interface="popover"
+          aria-label="Filtrer par genre"
+          [value]="selectedGenreId() ?? 0"
+          (ionChange)="onGenreChange($event)"
+        >
+          <ion-select-option [value]="0">Tous les genres</ion-select-option>
+
+          <ion-select-option
+            *ngFor="let genre of genres()"
+            [value]="genre.id"
+          >
+            {{ genre.name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </section>
+
+    <div
+      class="loading-state"
+      *ngIf="isLoading() || manualMoviesLoading()"
+    >
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement des films…</p>
+    </div>
+
+    <div
+      class="error-state"
+      *ngIf="!isLoading() && errorMessage()"
+    >
+      <p>{{ errorMessage() }}</p>
+      <ion-button (click)="loadMovies()">Réessayer</ion-button>
+    </div>
+
+    <ion-card
+      class="error-state"
+      *ngIf="!isLoading() && manualMoviesError()"
+    >
+      <ion-card-content>
+        <p>{{ manualMoviesError() }}</p>
+        <ion-button fill="outline" (click)="loadManualMovies()">
+          Réessayer
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <div
+      class="movie-grid"
+      *ngIf="!isLoading() && !errorMessage() && catalogMovies().length > 0"
+    >
+      <ion-card
+        class="movie-card"
+        *ngFor="let movie of catalogMovies()"
+      >
+        <ion-button
+          class="favorite-button"
+          fill="solid"
+          shape="round"
+          size="small"
+          [disabled]="!isAuthenticated()"
+          [attr.aria-label]="
+    isFavorite(movie.id)
+      ? 'Retirer ' + movie.title + ' des favoris'
+      : 'Ajouter ' + movie.title + ' aux favoris'
+  "
+          [title]="
+    isAuthenticated()
+      ? (isFavorite(movie.id)
+          ? 'Retirer des favoris'
+          : 'Ajouter aux favoris')
+      : 'Connecte-toi pour gérer tes favoris'
+  "
+          (click)="toggleCatalogFavorite(movie)"
+        >
+          <ion-icon
+            slot="icon-only"
+            [name]="isFavorite(movie.id) ? 'heart' : 'heart-outline'"
+          ></ion-icon>
+        </ion-button>
+
+
+        <a
+          class="movie-card-link"
+          [routerLink]="['/movie-detail', movie.id]"
+          [attr.aria-label]="'Afficher les détails de ' + movie.title"
+        >
+          <ng-container
+            *ngTemplateOutlet="movieCardContent; context: { $implicit: movie }"
+          ></ng-container>
+        </a>
+      </ion-card>
+    </div>
+
+    <ng-template #movieCardContent let-item>
+      <div class="poster-wrapper">
+        <ng-container
+          *ngIf="getPosterUrl(item.poster_path) as posterUrl; else noPoster"
+        >
+          <img
+            [src]="posterUrl"
+            [alt]="'Affiche de ' + item.title"
+            loading="lazy"
+          />
+        </ng-container>
+
+        <ng-template #noPoster>
+          <div class="no-poster">Affiche indisponible</div>
+        </ng-template>
+      </div>
+
+      <div class="movie-info">
+        <h2 class="movie-title">{{ item.title }}</h2>
+
+        <p class="movie-meta">
+          {{
+            item.release_date
+              ? (item.release_date | slice: 0 : 4)
+              : 'Date inconnue'
+          }}
+          <ng-container *ngIf="item.vote_average !== null">
+            · Note {{ item.vote_average | number: '1.1-1' }}/10
+          </ng-container>
+        </p>
+
+        <p class="movie-overview">
+          {{ item.overview || 'Aucun résumé disponible.' }}
+        </p>
+      </div>
+    </ng-template>
+
+    <div
+      class="empty-state"
+      *ngIf="
+        !isLoading() &&
+        !manualMoviesLoading() &&
+        !errorMessage() &&
+        catalogMovies().length === 0
+      "
+    >
+      <p>Aucun film à afficher pour le moment.</p>
+    </div>
+  </main>
 </ion-content>

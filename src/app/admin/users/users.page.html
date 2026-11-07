@@ -1,0 +1,98 @@
+<app-page-header
+  title="Utilisateurs"
+  [showMenu]="true"
+></app-page-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Utilisateurs</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <main class="users-content">
+    <section class="users-intro">
+      <h1>Gestion des utilisateurs</h1>
+      <p>Consulte les comptes et gère leur accès à l’application.</p>
+    </section>
+
+    <div class="users-loading" *ngIf="isLoading()">
+      <ion-spinner name="crescent" aria-label="Chargement"></ion-spinner>
+      <p>Chargement des utilisateurs…</p>
+    </div>
+
+    <ion-card class="users-error" *ngIf="!isLoading() && errorMessage()">
+      <ion-card-content>
+        <p>{{ errorMessage() }}</p>
+        <ion-button fill="outline" (click)="loadUsers()">
+          Réessayer
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card
+      class="users-empty"
+      *ngIf="!isLoading() && !errorMessage() && users().length === 0"
+    >
+      <ion-card-content>
+        Aucun utilisateur à afficher.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-list
+      class="users-list"
+      *ngIf="!isLoading() && !errorMessage() && users().length > 0"
+    >
+      <ion-card class="user-card" *ngFor="let user of users()">
+        <ion-card-header>
+          <ion-card-title>
+            {{ user.prenom }} {{ user.nom }}
+          </ion-card-title>
+          <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div class="user-details">
+            <ion-chip [color]="user.isActive ? 'success' : 'medium'">
+              <ion-label>
+                {{ user.isActive ? 'Compte actif' : 'Compte désactivé' }}
+              </ion-label>
+            </ion-chip>
+
+            <ion-chip *ngIf="user.role === 'admin'" color="primary">
+              <ion-label>Administrateur</ion-label>
+            </ion-chip>
+
+            <p *ngIf="user.age">
+              Âge : {{ user.age }}
+            </p>
+          </div>
+
+          <ion-note *ngIf="isCurrentUser(user)" color="medium">
+            Compte actuellement connecté
+          </ion-note>
+
+          <ion-button
+            *ngIf="user.role !== 'admin' && !isCurrentUser(user)"
+            class="user-status-button"
+            expand="block"
+            [color]="user.isActive ? 'danger' : 'success'"
+            [disabled]="updatingUserId() === user.uid"
+            (click)="toggleUserStatus(user)"
+          >
+            <ion-spinner
+              *ngIf="updatingUserId() === user.uid"
+              name="crescent"
+            ></ion-spinner>
+
+            <span *ngIf="updatingUserId() !== user.uid">
+              {{ user.isActive ? 'Désactiver le compte' : 'Activer le compte' }}
+            </span>
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </main>
+</ion-content>
+

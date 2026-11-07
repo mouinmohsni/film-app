@@ -1,0 +1,64 @@
+<app-page-header
+  title="Administration"
+  [showMenu]="true"
+></app-page-header>
+
+
+<ion-content [fullscreen]="true">
+  <main class="admin-content">
+    <section class="admin-intro">
+      <p class="admin-eyebrow">Films-app</p>
+      <h1>Tableau de bord</h1>
+      <p>Choisis une section pour administrer l’application.</p>
+    </section>
+
+    <div class="admin-grid">
+      <ion-card class="admin-card">
+        <ion-card-header>
+          <div class="admin-icon">
+            <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-card-title>Utilisateurs</ion-card-title>
+          <ion-card-subtitle>Comptes et accès</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          Consulter les comptes et gérer leur statut.
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="admin-card">
+        <ion-card-header>
+          <div class="admin-icon">
+            <ion-icon name="film-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-card-title>Films</ion-card-title>
+          <ion-card-subtitle>Catalogue de l’application</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          Consulter les films ajoutés manuellement et les gérer.
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="admin-card">
+        <ion-card-header>
+          <div class="admin-icon">
+            <ion-icon name="add-circle-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <ion-card-title>Ajouter un film</ion-card-title>
+          <ion-card-subtitle>Enrichir le catalogue</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          Ajouter un film manuellement dans Firestore.
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-note class="admin-note">
+      Les fonctions de gestion seront ajoutées une par une.
+    </ion-note>
+  </main>
+</ion-content>
+

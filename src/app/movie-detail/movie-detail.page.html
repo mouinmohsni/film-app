@@ -1,0 +1,124 @@
+<app-page-header
+  [title]="movie()?.title ?? 'Détail du film'"
+  [showBack]="true"
+  defaultHref="/home"
+></app-page-header>
+
+<ion-content>
+  <main class="detail-page">
+    <div class="loading-state" *ngIf="isLoading()">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement du film…</p>
+    </div>
+
+    <div class="error-state" *ngIf="!isLoading() && errorMessage()">
+      <p>{{ errorMessage() }}</p>
+      <ion-button (click)="loadMovie()">Réessayer</ion-button>
+    </div>
+
+    <ng-container *ngIf="movie() as film">
+      <div
+        class="backdrop-wrapper"
+        *ngIf="getImageUrl(film.backdrop_path, 'w1280') as backdropUrl"
+        [class.manual-backdrop]="film.source === 'firestore'"
+      >
+        <img
+          class="backdrop-image"
+          [src]="backdropUrl"
+          alt=""
+          loading="lazy"
+        />
+      </div>
+
+      <section class="movie-detail-content">
+        <div class="poster-column">
+          <ng-container
+            *ngIf="getImageUrl(film.poster_path) as posterUrl; else noPoster"
+          >
+            <img
+              class="detail-poster"
+              [src]="posterUrl"
+              [alt]="'Affiche de ' + film.title"
+              loading="lazy"
+            />
+          </ng-container>
+
+          <ng-template #noPoster>
+            <div class="detail-no-poster">Affiche indisponible</div>
+          </ng-template>
+        </div>
+
+        <div class="movie-info">
+          <div class="movie-heading-row">
+            <h1>{{ film.title }}</h1>
+
+            <ion-button
+              class="detail-favorite-button"
+              fill="clear"
+              shape="round"
+              [disabled]="
+                !isAuthenticated() ||
+                isFavoriteLoading() ||
+                isFavoriteSaving()
+              "
+              [attr.aria-label]="
+                isFavorite()
+                  ? 'Retirer ' + film.title + ' des favoris'
+                  : 'Ajouter ' + film.title + ' aux favoris'
+              "
+              [attr.title]="
+                isAuthenticated()
+                  ? (isFavorite()
+                      ? 'Retirer des favoris'
+                      : 'Ajouter aux favoris')
+                  : 'Connecte-toi pour gérer tes favoris'
+              "
+              (click)="toggleFavorite(film)"
+            >
+              <ion-icon
+                slot="icon-only"
+                [name]="isFavorite() ? 'heart' : 'heart-outline'"
+              ></ion-icon>
+            </ion-button>
+          </div>
+
+          <p class="tagline" *ngIf="film.tagline">
+            {{ film.tagline }}
+          </p>
+
+          <div class="movie-meta">
+            <span>
+              {{ film.release_date || 'Date inconnue' }}
+            </span>
+
+            <span *ngIf="film.runtime">
+              {{ film.runtime }} min
+            </span>
+
+            <span class="rating" *ngIf="film.vote_average !== null">
+              Note {{ film.vote_average | number: '1.1-1' }}/10
+            </span>
+          </div>
+
+          <div class="genre-list" *ngIf="film.genres.length > 0">
+            <ion-chip *ngFor="let genre of film.genres">
+              <ion-label>{{ genre.name }}</ion-label>
+            </ion-chip>
+          </div>
+
+          <section class="overview-section">
+            <h2>Synopsis</h2>
+            <p>{{ film.overview || 'Aucun synopsis disponible.' }}</p>
+          </section>
+
+          <p
+            class="original-title"
+            *ngIf="film.original_title && film.original_title !== film.title"
+          >
+            Titre original : {{ film.original_title }}
+          </p>
+        </div>
+      </section>
+    </ng-container>
+  </main>
+</ion-content>

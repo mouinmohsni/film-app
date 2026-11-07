@@ -1,0 +1,55 @@
+<app-page-header
+  title="Paramètres"
+  [showMenu]="true"
+></app-page-header>
+
+<ion-content class="ion-padding">
+  <ion-list [inset]="true">
+    <ion-item>
+      <ion-label>
+        <h2>Mode sombre</h2>
+        <p>Appliquer le thème à toute l’application</p>
+      </ion-label>
+
+      <ion-toggle
+        slot="end"
+        [checked]="darkMode"
+        (ionChange)="onThemeChange($event)"
+        aria-label="Activer le mode sombre"
+      ></ion-toggle>
+    </ion-item>
+
+    <ion-item *ngIf="authReady() && isAuthenticated()">
+      <ion-label>
+        <h2>Participer au matching</h2>
+        <p>
+          Choisis si tu souhaites participer aux correspondances entre
+          utilisateurs.
+        </p>
+      </ion-label>
+
+      <ion-toggle
+        slot="end"
+        [checked]="matchingEnabled()"
+        [disabled]="isMatchingLoading() || isMatchingSaving()"
+        (ionChange)="onMatchingChange($event)"
+        aria-label="Participer au matching"
+      ></ion-toggle>
+    </ion-item>
+
+    <ion-item *ngIf="authReady() && !isAuthenticated()">
+      <ion-label>
+        <h2>Matching</h2>
+        <p>Connecte-toi pour gérer ta participation.</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <p
+    class="matching-message"
+    *ngIf="matchingMessage()"
+    role="status"
+  >
+    {{ matchingMessage() }}
+  </p>
+</ion-content>

@@ -1,0 +1,84 @@
+ion-content {
+  --background: var(--app-background);
+}
+
+ion-content::part(scroll) {
+  display: flex;
+  flex-direction: column;
+}
+
+ion-toolbar {
+  --background: var(--app-header);
+  --color: var(--app-header-text);
+  position: relative;
+}
+
+ion-title.page-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% - 96px);
+  transform: translate(-50%, -50%);
+  color: var(--app-header-text);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-align: center;
+  pointer-events: none;
+}
+
+ion-back-button {
+  --color: var(--app-header-text);
+}
+
+.register-layout {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+ion-card {
+  width: 100%;
+  max-width: 440px;
+  margin: 0;
+  border: 1px solid var(--app-border);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  --background: var(--app-surface);
+  --color: var(--app-text);
+}
+
+ion-card-title {
+  color: var(--app-text);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+ion-card-subtitle {
+  margin-top: 6px;
+  color: var(--app-muted);
+}
+
+ion-input {
+  margin-top: 14px;
+  --background: var(--app-input-background);
+  --color: var(--app-text);
+  --placeholder-color: var(--app-muted);
+  --highlight-color-focused: var(--app-accent);
+  --border-color: var(--app-border);
+  --border-radius: 10px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+ion-button {
+  margin-top: 24px;
+  --background: var(--app-accent);
+  --background-activated: var(--app-accent-pressed);
+  --color: var(--app-accent-text);
+  --border-radius: 10px;
+  font-weight: 700;
+}

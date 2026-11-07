@@ -1,0 +1,106 @@
+
+
+<app-page-header
+  title="Inscription"
+  [showBack]="true"
+  defaultHref="/home"
+></app-page-header>
+
+<ion-content>
+  <div class="register-layout">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Créer un compte</ion-card-title>
+        <ion-card-subtitle>Crée ton compte pour continuer</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form (ngSubmit)="register()">
+
+          <ion-input
+            fill="outline"
+            label="Nom"
+            labelPlacement="floating"
+            type="text"
+            name="nom"
+            autocomplete="family-name"
+            [(ngModel)]="nom"
+            required
+          ></ion-input>
+
+          <ion-input
+            class="ion-margin-top"
+            fill="outline"
+            label="Prénom"
+            labelPlacement="floating"
+            type="text"
+            name="prenom"
+            autocomplete="given-name"
+            [(ngModel)]="prenom"
+            required
+          ></ion-input>
+
+          <ion-input
+            class="ion-margin-top"
+            fill="outline"
+            label="Âge"
+            labelPlacement="floating"
+            type="number"
+            name="age"
+            min="1"
+            max="120"
+            [(ngModel)]="age"
+            required
+          ></ion-input>
+
+
+          <ion-input
+            fill="outline"
+            label="Adresse e-mail"
+            labelPlacement="floating"
+            type="email"
+            name="email"
+            autocomplete="email"
+            [(ngModel)]="email"
+            required
+          ></ion-input>
+
+          <ion-input
+            class="ion-margin-top"
+            fill="outline"
+            label="Mot de passe"
+            labelPlacement="floating"
+            type="password"
+            name="password"
+            autocomplete="new-password"
+            [(ngModel)]="password"
+            required
+          ></ion-input>
+
+          <ion-input
+            class="ion-margin-top"
+            fill="outline"
+            label="Confirmer le mot de passe"
+            labelPlacement="floating"
+            type="password"
+            name="confirmPassword"
+            autocomplete="new-password"
+            [(ngModel)]="confirmPassword"
+            required
+          ></ion-input>
+
+
+
+          <ion-button
+            class="ion-margin-top"
+            expand="block"
+            type="submit"
+            [disabled]="isLoading"
+          >
+            {{ isLoading ? 'Création du compte…' : 'Créer mon compte' }}
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

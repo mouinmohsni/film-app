@@ -1,0 +1,180 @@
+<app-page-header
+  title="profile"
+  [showMenu]="true"
+></app-page-header>
+
+<ion-content>
+  <main class="profile-content">
+    <section class="page-intro">
+      <h1>Mon profil</h1>
+      <p>Consulte les informations de ton compte.</p>
+    </section>
+
+    <div class="loading-state" *ngIf="isLoading()">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement du profil…</p>
+    </div>
+
+    <div class="error-state" *ngIf="!isLoading() && errorMessage()">
+      <p>{{ errorMessage() }}</p>
+
+      <ion-button
+        *ngIf="!isAuthenticated()"
+        routerLink="/login"
+      >
+        Se connecter
+      </ion-button>
+
+      <ion-button
+        *ngIf="isAuthenticated()"
+        (click)="loadProfile()"
+      >
+        Réessayer
+      </ion-button>
+    </div>
+
+    <ng-container *ngIf="!isLoading() && profile() as user">
+      <ion-card class="profile-card">
+        <div class="profile-avatar">
+          <img
+            *ngIf="user.photoDataUrl; else avatarPlaceholder"
+            [src]="user.photoDataUrl"
+            alt="Photo de profil"
+          />
+
+          <ng-template #avatarPlaceholder>
+            <ion-icon
+              name="person-circle-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </ng-template>
+        </div>
+
+        <div class="profile-photo-actions">
+          <ion-button
+            fill="outline"
+            [disabled]="isPhotoSaving()"
+            (click)="openPhotoOptions()"
+          >
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            {{ user.photoDataUrl ? 'Changer la photo' : 'Ajouter une photo' }}
+          </ion-button>
+        </div>
+
+        <div
+          class="photo-message"
+          *ngIf="photoMessage()"
+          role="status"
+        >
+          <ion-spinner
+            *ngIf="isPhotoSaving()"
+            name="crescent"
+          ></ion-spinner>
+          <span>{{ photoMessage() }}</span>
+        </div>
+
+
+        <ion-card-header>
+          <ion-card-title>{{ user.prenom }} {{ user.nom }}</ion-card-title>
+          <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list lines="full">
+            <ion-item>
+              <ion-label>
+                <h2>Prénom</h2>
+                <p>{{ user.prenom }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h2>Nom</h2>
+                <p>{{ user.nom }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h2>Âge</h2>
+                <p>{{ user.age }} ans</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h2>Adresse e-mail</h2>
+                <p>{{ user.email }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="password-card">
+        <ion-card-header>
+          <ion-card-title>Modifier le mot de passe</ion-card-title>
+          <ion-card-subtitle>
+            Confirme ton mot de passe actuel pour en choisir un nouveau.
+          </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-input
+              label="Mot de passe actuel"
+              labelPlacement="stacked"
+              type="password"
+              autocomplete="current-password"
+              [(ngModel)]="currentPassword"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Nouveau mot de passe"
+              labelPlacement="stacked"
+              type="password"
+              autocomplete="new-password"
+              [(ngModel)]="newPassword"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Confirmer le nouveau mot de passe"
+              labelPlacement="stacked"
+              type="password"
+              autocomplete="new-password"
+              [(ngModel)]="confirmNewPassword"
+            ></ion-input>
+          </ion-item>
+
+          <p
+            *ngIf="passwordMessage()"
+            class="password-message"
+            [class.success]="passwordMessageType() === 'success'"
+            [class.error]="passwordMessageType() === 'error'"
+            role="status"
+          >
+            {{ passwordMessage() }}
+          </p>
+
+          <ion-button
+            expand="block"
+            [disabled]="isPasswordChanging()"
+            (click)="changePassword()"
+          >
+            {{
+              isPasswordChanging()
+                ? 'Modification en cours…'
+                : 'Modifier le mot de passe'
+            }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+    </ng-container>
+  </main>
+</ion-content>
