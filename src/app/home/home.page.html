@@ -1,8 +1,10 @@
+<!-- En-tête réutilisable  -->
 <app-page-header
   title="Films-app"
   [showMenu]="true"
 ></app-page-header>
 
+<!--  défilement de la page. -->
 <ion-content>
   <main class="home-content">
     <section class="page-intro">
@@ -11,6 +13,7 @@
     </section>
 
     <section class="catalog-controls">
+      <!-- Barre de recherche Ionic. -->
       <ion-searchbar
         class="movie-search"
         placeholder="Rechercher un film"
@@ -20,16 +23,22 @@
         (ionInput)="onSearchInput($event)"
       ></ion-searchbar>
 
+      <!-- ion-item regroupe le libellé et le sélecteur de catégorie. -->
       <ion-item class="genre-filter" lines="none">
         <ion-label>Catégorie</ion-label>
 
+        <!-- Sélecteur Ionic des genres ;   -->
         <ion-select
           interface="popover"
           aria-label="Filtrer par genre"
           [value]="selectedGenreId() ?? 0"
           (ionChange)="onGenreChange($event)"
         >
+          <!-- ionChange appelle la méthode onGenreChange -->
+
+
           <ion-select-option [value]="0">Tous les genres</ion-select-option>
+
 
           <ion-select-option
             *ngFor="let genre of genres()"
@@ -45,6 +54,7 @@
       class="loading-state"
       *ngIf="isLoading() || manualMoviesLoading()"
     >
+      <!-- Animation de chargement Ionic. -->
       <ion-spinner name="crescent"></ion-spinner>
       <p>Chargement des films…</p>
     </div>
@@ -54,6 +64,8 @@
       *ngIf="!isLoading() && errorMessage()"
     >
       <p>{{ errorMessage() }}</p>
+
+      <!-- Le bouton relance  -->
       <ion-button (click)="loadMovies()">Réessayer</ion-button>
     </div>
 
@@ -63,20 +75,26 @@
     >
       <ion-card-content>
         <p>{{ manualMoviesError() }}</p>
+
         <ion-button fill="outline" (click)="loadManualMovies()">
           Réessayer
         </ion-button>
       </ion-card-content>
     </ion-card>
 
+    <!-- Grille affichée s’il n’y a pas de chargement ou d’erreur
+         et que le catalogue contient des films. -->
     <div
       class="movie-grid"
       *ngIf="!isLoading() && !errorMessage() && catalogMovies().length > 0"
     >
+      <!-- Une carte Ionic est créée pour chaque film du catalogue. -->
       <ion-card
         class="movie-card"
         *ngFor="let movie of catalogMovies()"
       >
+        <!-- Bouton du favori.
+             L’action ajoute ou retire le film des favoris. -->
         <ion-button
           class="favorite-button"
           fill="solid"
@@ -84,19 +102,21 @@
           size="small"
           [disabled]="!isAuthenticated()"
           [attr.aria-label]="
-    isFavorite(movie.id)
-      ? 'Retirer ' + movie.title + ' des favoris'
-      : 'Ajouter ' + movie.title + ' aux favoris'
-  "
+            isFavorite(movie.id)
+              ? 'Retirer ' + movie.title + ' des favoris'
+              : 'Ajouter ' + movie.title + ' aux favoris'
+          "
           [title]="
-    isAuthenticated()
-      ? (isFavorite(movie.id)
-          ? 'Retirer des favoris'
-          : 'Ajouter aux favoris')
-      : 'Connecte-toi pour gérer tes favoris'
-  "
+            isAuthenticated()
+              ? (isFavorite(movie.id)
+                  ? 'Retirer des favoris'
+                  : 'Ajouter aux favoris')
+              : 'Connecte-toi pour gérer tes favoris'
+          "
           (click)="toggleCatalogFavorite(movie)"
         >
+          <!-- Icône Ionic : cœur plein si le film est favori,
+               cœur vide sinon. -->
           <ion-icon
             slot="icon-only"
             [name]="isFavorite(movie.id) ? 'heart' : 'heart-outline'"
@@ -109,6 +129,8 @@
           [routerLink]="['/movie-detail', movie.id]"
           [attr.aria-label]="'Afficher les détails de ' + movie.title"
         >
+          <!-- Réutilise le modèle HTML de carte déclaré plus bas,
+               en lui transmettant le film courant. -->
           <ng-container
             *ngTemplateOutlet="movieCardContent; context: { $implicit: movie }"
           ></ng-container>
@@ -116,6 +138,7 @@
       </ion-card>
     </div>
 
+    <!-- Modèle réutilisable pour afficher le contenu de chaque carte. -->
     <ng-template #movieCardContent let-item>
       <div class="poster-wrapper">
         <ng-container
@@ -137,11 +160,13 @@
         <h2 class="movie-title">{{ item.title }}</h2>
 
         <p class="movie-meta">
+
           {{
             item.release_date
               ? (item.release_date | slice: 0 : 4)
               : 'Date inconnue'
           }}
+
           <ng-container *ngIf="item.vote_average !== null">
             · Note {{ item.vote_average | number: '1.1-1' }}/10
           </ng-container>
