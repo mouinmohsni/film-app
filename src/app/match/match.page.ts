@@ -35,11 +35,12 @@ export class MatchPage {
   isLoading = signal(true);
   message = signal('');
 
-  // Ionic appelle cette méthode chaque fois qu’on ouvre la page.
+  // Recharge les correspondances chaque fois que l’utilisateur ouvre cette page.
   ionViewWillEnter(): void {
     void this.loadMatches();
   }
 
+  // Vérifie les conditions nécessaires, récupère les profils et calcule les correspondances.
   private async loadMatches(): Promise<void> {
     this.isLoading.set(true);
     this.message.set('');
@@ -95,6 +96,7 @@ export class MatchPage {
     }
   }
 
+  // Construit les préférences de l’utilisateur à partir de ses films favoris.
   private createPreferences(favorites: FavoriteMovie[]): Preferences {
     const years = favorites
       .map((favorite) => Number(favorite.releaseDate.slice(0, 4)))
@@ -123,6 +125,7 @@ export class MatchPage {
     };
   }
 
+  // Calcule les scores par critère et le score global entre deux profils.
   private calculateMatch(
     preferences: Preferences,
     profile: MatchProfile,
@@ -163,7 +166,7 @@ export class MatchPage {
     };
   }
 
-  // Similarité de Jaccard : éléments communs divisés par l’union des listes.
+  // Compare deux listes de noms  : éléments communs / éléments distincts.
   private setSimilarity(first: string[], second: string[]): number {
     const firstSet = new Set(first);
     const secondSet = new Set(second);
@@ -184,12 +187,13 @@ export class MatchPage {
     return (commonCount / union.size) * 100;
   }
 
-  // Les années proches comptent davantage ; un écart de 10 ans ou plus vaut 0.
+  // Compare les années de sortie ; les années proches donnent une meilleure similarité.
   private yearSimilarity(first: number[], second: number[]): number {
     if (first.length === 0 || second.length === 0) {
       return 0;
     }
 
+    // Calcule la similarité moyenne en associant chaque année à l’année la plus proche.
     const averageNearestSimilarity = (
       sourceYears: number[],
       targetYears: number[],
@@ -213,6 +217,7 @@ export class MatchPage {
     return ((forward + backward) / 2) * 100;
   }
 
+  // Retire les doublons d’une liste d’années.
   private unique(values: number[]): number[] {
     return [...new Set(values)];
   }
