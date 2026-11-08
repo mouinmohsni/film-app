@@ -65,6 +65,7 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.stopAuthListener?.();
   }
 
+  // Récupère le profil de l’utilisateur
   async loadProfile(): Promise<void> {
     this.isLoading.set(true);
     this.errorMessage.set('');
@@ -86,6 +87,8 @@ export class ProfilePage implements OnInit, OnDestroy {
       this.isLoading.set(false);
     }
   }
+
+  // Ouvre l’appareil photo pour prendre une nouvelle photo de profil.
 
   async takeProfilePhoto(): Promise<void> {
     await this.runPhotoAction(async () => {
